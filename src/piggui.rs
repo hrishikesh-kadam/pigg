@@ -1,4 +1,5 @@
 use clap::{Arg, ArgMatches};
+#[cfg(not(target_arch = "wasm32"))]
 use std::env;
 
 use iced::widget::{container, Column};
@@ -42,6 +43,7 @@ fn main() -> Result<(), iced::Error> {
 }
 
 /// Parse the command line arguments using clap
+#[cfg(not(target_arch = "wasm32"))]
 fn get_matches() -> ArgMatches {
     let app = clap::Command::new(env!("CARGO_BIN_NAME")).version(env!("CARGO_PKG_VERSION"));
 
@@ -56,6 +58,13 @@ fn get_matches() -> ArgMatches {
     app.get_matches()
 }
 
+#[cfg(target_arch = "wasm32")]
+fn get_matches() -> ArgMatches {
+    clap::Command::new("piggui")
+        .version("0.1.0")  // You might want to replace this with a constant or env var
+        .about("'piggui' - Pi GPIO GUI for interacting with Raspberry Pi GPIO Hardware")
+        .get_matches()
+}
 /// These are the messages that Piggui responds to
 #[derive(Debug, Clone)]
 pub enum Message {

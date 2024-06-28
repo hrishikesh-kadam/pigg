@@ -3,12 +3,27 @@ use crate::{Message, ToastMessage};
 use iced::widget::{Button, Text};
 use iced::{Color, Element};
 
+#[cfg(not(target_arch = "wasm32"))]
 const VERSION: &str = env!("CARGO_PKG_VERSION");
+#[cfg(not(target_arch = "wasm32"))]
 const BIN_NAME: &str = env!("CARGO_BIN_NAME");
+#[cfg(not(target_arch = "wasm32"))]
 const PKG_NAME: &str = env!("CARGO_PKG_NAME");
+#[cfg(not(target_arch = "wasm32"))]
 const LICENSE: &str = env!("CARGO_PKG_LICENSE");
+#[cfg(not(target_arch = "wasm32"))]
 const REPOSITORY: &str = env!("CARGO_PKG_REPOSITORY");
 
+#[cfg(target_arch = "wasm32")]
+const VERSION: &str = "0.1.0"; // Replace with your actual version
+#[cfg(target_arch = "wasm32")]
+const BIN_NAME: &str = "piggui";
+#[cfg(target_arch = "wasm32")]
+const PKG_NAME: &str = "pigg";
+#[cfg(target_arch = "wasm32")]
+const LICENSE: &str = "Apache-2.0";
+#[cfg(target_arch = "wasm32")]
+const REPOSITORY: &str = "https://github.com/andrewdavidmackenzie/pigg/";
 #[must_use]
 pub fn version() -> String {
     format!(
