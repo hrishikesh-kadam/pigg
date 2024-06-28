@@ -20,14 +20,14 @@ name = "piglet"
 path = "src/piglet.rs"
 
 [features]
-default = []
+default = ["fake_hw"]
 pi_hw = ["rppal"]
 fake_hw = []
 gui = ["iced", "iced_futures", "rfd", "plotters-iced", "plotters"]
 
 [dependencies]
 # use in piggui and piglet
-chrono = { version = "0.4", default-features = false, features = ["now"] }
+chrono = { version = "0.4", default-features = false, features = ["now", "wasmbind"] }
 serde = { version = "1.0.203", default-features = false, features = ["derive"] }
 serde_json = { version = "1.0.118", default-features = false, features = ["std"] }
 rand = { version = "0.8.5" }
