@@ -132,3 +132,12 @@ copy: build
 .PHONY: ssh
 ssh:
 	ssh $(PI_USER)@$(PI_TARGET)
+
+.PHONY: web-build
+web-build:
+	rustup target add wasm32-unknown-unknown
+	cargo build --bin piggui --features "gui","fake_hw" --target wasm32-unknown-unknown
+
+.PHONY: web-run
+web-run: web-build
+	trunk serve --features="gui","fake_hw"
