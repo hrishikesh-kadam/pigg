@@ -1,13 +1,17 @@
 use crate::hw::config::HardwareConfig;
 use crate::views::message_row::MessageMessage::{Error, Info};
 use crate::views::message_row::MessageRowMessage::ShowStatusMessage;
-use crate::{get_matches, Message};
+use crate::Message;
 use crate::Message::{ConfigLoaded, InfoRow};
 use iced::Command;
-#[cfg(not(target_arch = "wasm32"))]
-use std::env;
 use std::io;
 use std::path::PathBuf;
+
+#[cfg(not(target_arch = "wasm32"))]
+use std::env;
+
+#[cfg(not(target_arch = "wasm32"))]
+use rfd;
 
 /// Asynchronously load a .piggui config file from file named `filename` (no picker)
 /// In the result, return the filename and the loaded [HardwareConfig]
@@ -16,19 +20,18 @@ async fn load(filename: String) -> io::Result<(String, HardwareConfig)> {
     Ok((filename, config))
 }
 
-/// Asynchronously show the user a picker and then load a .piggui config from the selected file
-/// If the user selects a file, and it is loaded successfully, it will return `Ok((filename, [GPIOConfig]))`
-/// If the user selects a file, and it is fails to load, it will return `Err(e)`
-/// If the user cancels the selection it will return `Ok(None)`
 #[cfg(target_arch = "wasm32")]
-fn get_path(handle: rfd::FileHandle) -> PathBuf {
-    PathBuf::from(handle.file_name())
+#[allow(dead_code)]
+fn get_path(file_name: String) -> PathBuf {
+    PathBuf::from(file_name)
 }
 
 #[cfg(target_arch = "wasm32")]
+#[allow(dead_code)]
 fn get_current_dir() -> PathBuf {
     PathBuf::new() // In wasm, we'll just use an empty path
 }
+
 #[cfg(not(target_arch = "wasm32"))]
 fn get_path(handle: rfd::FileHandle) -> PathBuf {
     handle.path().to_owned()
@@ -39,6 +42,7 @@ fn get_current_dir() -> PathBuf {
     env::current_dir().unwrap_or_else(|_| PathBuf::new())
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 async fn load_via_picker() -> io::Result<Option<(String, HardwareConfig)>> {
     if let Some(handle) = rfd::AsyncFileDialog::new()
         .add_filter("Pigg Config", &["pigg"])
@@ -55,6 +59,12 @@ async fn load_via_picker() -> io::Result<Option<(String, HardwareConfig)>> {
     }
 }
 
+#[cfg(target_arch = "wasm32")]
+async fn load_via_picker() -> io::Result<Option<(String, HardwareConfig)>> {
+    todo!()
+}
+
+#[cfg(not(target_arch = "wasm32"))]
 async fn save_via_picker(gpio_config: HardwareConfig) -> io::Result<bool> {
     if let Some(handle) = rfd::AsyncFileDialog::new()
         .add_filter("Pigg Config", &["pigg"])
@@ -71,6 +81,13 @@ async fn save_via_picker(gpio_config: HardwareConfig) -> io::Result<bool> {
         Ok(false)
     }
 }
+
+#[cfg(target_arch = "wasm32")]
+async fn save_via_picker(_gpio_config: HardwareConfig) -> io::Result<bool> {
+    todo!()
+}
+
+// ... rest of the code remains the same
 /// Utility function that saves the [HardwareConfig] to a file using `Command::perform` and uses
 /// the result to return correct [Message]
 pub fn save(gpio_config: HardwareConfig) -> Command<Message> {

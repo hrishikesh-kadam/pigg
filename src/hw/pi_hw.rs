@@ -1,10 +1,12 @@
 use std::collections::HashMap;
 use std::fs;
 use std::io;
-
+#[cfg(not(target_arch = "wasm32"))]
 use rppal::gpio::Gpio;
+#[cfg(not(target_arch = "wasm32"))]
 use rppal::gpio::OutputPin;
 /// Implementation of GPIO for raspberry pi - uses rrpal
+#[cfg(not(target_arch = "wasm32"))]
 use rppal::gpio::{InputPin, Level, Trigger};
 
 use crate::hw::pin_description::PinDescriptionSet;

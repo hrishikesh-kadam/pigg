@@ -1,7 +1,9 @@
-use clap::{Arg, ArgMatches};
+// use clap::{Arg, ArgMatches};
 #[cfg(not(target_arch = "wasm32"))]
 use std::env;
-
+#[cfg(not(target_arch = "wasm32"))]
+use clap::Arg;
+use clap::ArgMatches;
 use iced::widget::{container, Column};
 use iced::{
     executor, window, Application, Command, Element, Length, Settings, Subscription, Theme,
