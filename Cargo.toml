@@ -20,7 +20,7 @@ name = "piglet"
 path = "src/piglet.rs"
 
 [features]
-default = ["fake_hw"]
+default = []
 pi_hw = ["rppal"]
 fake_hw = []
 gui = ["iced", "iced_futures", "rfd", "plotters-iced", "plotters"]
@@ -33,7 +33,6 @@ serde_json = { version = "1.0.118", default-features = false, features = ["std"]
 rand = { version = "0.8.5" }
 clap = { version = "4.5.7", default-features = false, features = ["std"] }
 
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 # for interacting with GPIO on the Raspberry Pi
 rppal = { version = "0.18.0", optional = true }
 
@@ -41,7 +40,6 @@ rppal = { version = "0.18.0", optional = true }
 log = "0.4.22"
 env_logger = "0.11.3"
 
-[target.'cfg(target_arch = "wasm32")'.dependencies]
 # used by piggui in GUI only
 iced = { version = "0.12.1", default-features = false, features = ["tokio", "debug", "canvas", "advanced"], optional = true }
 iced_aw = { version = "0.9.3", default-features = false, features = ["tabs", "card", "modal"], optional = true }
@@ -53,6 +51,8 @@ plotters = { version = "0.3", optional = true, default_features = false, feature
     "chrono",
     "line_series",
 ] }
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.2", features = ["js"] }
 
 [dev-dependencies]
 tempfile = "3"

@@ -102,23 +102,24 @@ mod test {
         assert_eq!(config.pins.get(&1), Some(&PinFunction::Input(None)));
     }
 
-    // #[test]
-    // fn load_test_file() {
-    //     let root = std::env::var("CARGO_MANIFEST_DIR").expect("Could not get manifest dir");
-    //     let mut path = PathBuf::from(root);
-    //     path = path.join("configs/andrews_board.pigg");
-    //     let config = HardwareConfig::load(path.to_str().expect("Could not get Path as str"))
-    //         .expect("Could not load GPIOConfig from path");
-    //     assert_eq!(config.pins.len(), 2);
-    //     // GPIO17 configured as an Output - set to true (high) level
-    //     assert_eq!(config.pins.get(&17), Some(&PinFunction::Output(Some(true))));
-    //
-    //     // GPIO26 configured as an Input - with an internal PullUp
-    //     assert_eq!(
-    //         config.pins.get(&26),
-    //         Some(&PinFunction::Input(Some(PullUp)))
-    //     );
-    // }
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn load_test_file() {
+        let root = std::env::var("CARGO_MANIFEST_DIR").expect("Could not get manifest dir");
+        let mut path = PathBuf::from(root);
+        path = path.join("configs/andrews_board.pigg");
+        let config = HardwareConfig::load(path.to_str().expect("Could not get Path as str"))
+            .expect("Could not load GPIOConfig from path");
+        assert_eq!(config.pins.len(), 2);
+        // GPIO17 configured as an Output - set to true (high) level
+        assert_eq!(config.pins.get(&17), Some(&PinFunction::Output(Some(true))));
+
+        // GPIO26 configured as an Input - with an internal PullUp
+        assert_eq!(
+            config.pins.get(&26),
+            Some(&PinFunction::Input(Some(PullUp)))
+        );
+    }
 
     #[test]
     fn save_one_pin_config_output_with_level() {

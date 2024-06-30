@@ -10,9 +10,6 @@ use std::path::PathBuf;
 #[cfg(not(target_arch = "wasm32"))]
 use std::env;
 
-#[cfg(not(target_arch = "wasm32"))]
-use rfd;
-
 /// Asynchronously load a .piggui config file from file named `filename` (no picker)
 /// In the result, return the filename and the loaded [HardwareConfig]
 async fn load(filename: String) -> io::Result<(String, HardwareConfig)> {
