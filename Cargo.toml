@@ -19,9 +19,8 @@ name = "piglet"
 path = "src/piglet.rs"
 
 [features]
-default = ["files"]
+default = []
 discovery = []
-files = [] # configure in build script if NOT on wasm32
 
 [dependencies]
 chrono = { version = "0.4", default-features = false, features = ["now", "serde"] }
